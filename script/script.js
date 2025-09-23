@@ -1,3 +1,9 @@
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+var keyState = {};  
+let body = document.querySelector("body");
 let canva = document.getElementById("canva");
 let ctx = canva.getContext("2d");
 
@@ -8,13 +14,13 @@ let x = canva.width / 2;
 let y = (canva.height / 6) * 5;
 let dx = 0;
 let dy = 5;
-let radius = 5;
+let radius = 6.5;
 let gameLoose = false;
 let rectangleX = canva.width/2-25;
-let rectangleY = 550;
-let rectangleWidth = 50;
-let rectangleHeight = 7;
-
+let rectangleY = canva.height -50;
+let rectangleWidth = 60;
+let rectangleHeight = 8;
+let dateDebut = Date.now();
 
 function resetCanva() {
   gameLoose = false;
@@ -27,6 +33,7 @@ function resetCanva() {
   y = (canva.height / 6) * 5;
   ctx.fill();
   ctx.closePath();
+  draw();
 }
 
 function drawPad() {
@@ -34,7 +41,7 @@ function drawPad() {
   ctx.fillStyle = "white";
   ctx.rect(rectangleX, rectangleY, rectangleWidth, rectangleHeight);
   ctx.fill();
-    ctx.closePath();
+  ctx.closePath();
 }
 
 function draw() {
@@ -46,13 +53,12 @@ function draw() {
   ctx.fillStyle = "darkblue";
   ctx.fillRect(0, 0, canva.width, canva.height);
   ctx.fillStyle = "white";
-  ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
+  ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
   ctx.fill();
   ctx.stroke();
   x += dx;
   y += dy;
   drawPad();
-
   if (canva.height - y < radius) {
     gameLoose = true;
   }
@@ -65,16 +71,46 @@ function draw() {
     dx = -dx;
     dy = dy;
   }
-  if( y + radius > rectagleY && x > rectangleX && x < rectangleX + rectagleWidth){
+
+  if (y + radius > rectangleY && x > rectangleX && x < rectangleX + rectangleWidth) {
     dx = dx;
     dy = -dy;
   }
+  let timer = Date.now();
+  console.log(timer - dateDebut);
+  document.getElementById("Score").innerHTML = "Score : " + Math.floor((timer-dateDebut)/1000) + " s";
+  requestAnimationFrame(draw);
 }
+window.addEventListener('keydown',function(e){
+    keyState[e. keyCode || e.which] = true;
+  },true);    
+window.addEventListener('keyup',function(e){
+    keyState[e.keyCode || e.which] = false;
+},true);
+    
+  function gameLoop() {
+    if (keyState[37] || keyState[65]){
+      if(rectangleX > 0){
+        rectangleX -= 5;
+      }
+    }    
+    if (keyState[39] || keyState[68]){
+      if(rectangleX + rectangleWidth < canva.width){
+        rectangleX += 5;
+      } 
+    }
+    setTimeout(gameLoop,10)
+}
+
+
+
+
 function startGame() {
   drawPad();
-  dx = ((Math.random() * 10) % 1) - ((Math.random() * 10) % 2) *3;
-  dy = ((Math.random() * 10) % 1) - ((Math.random() * 10) % 2) *3;
-  setInterval(draw, 10);
+  dx = 1
+  dy = -2
+  draw();
 }
 
 startGame();
+gameLoop();

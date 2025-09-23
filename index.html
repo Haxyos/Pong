@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="script/script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="style/style.css">
     <title>Document</title>
 </head>
-<body>
-    <div></div>
-    <h1>Solo Pong</h1>
-    <h3>Try to stay alive the longest</h3>
-    <div>
-        <canvas width="400" height="600" id="canva"></canvas>
+
+<body class="bg-[#022b57] text-white flex flex-col items-center justify-center">
+    <div class="align-center text-justify items-center content-center mb-4">
+        <h1 class="text-center text-4xl p-3">Solo Pong</h1>
+        <h3 id="Score" class="text-center text-xl p-1">Score :</h3>
     </div>
     <div>
-        <button id="newGameButton" type="button" onclick="resetCanva()"> New game</button>
-        <p id="scoreDisplay"></p>
+        <canvas class="border-4 border-white rounded-xl" width="350" height="500" id="canva"></canvas>
     </div>
     <div>
-        <button id="leftInput">left</button>
+        <button class="" id="leftInput">left</button>
+        <button
+            class="rounded mt-2 mb-1 pl-1 pr-1 text-3xl hover:shadow hover:shadow-gray-500 hover:duration-300 hover:bg-blue-400 hover:cursor-pointer"
+            id="newGameButton" type="button" onclick="resetCanva()"> New game</button>
+
         <button id="rightInput">right</button>
     </div>
+    <div>
+
+    </div>
 </body>
+
 </html>
