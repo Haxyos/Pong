@@ -6,6 +6,9 @@ var keyState = {};
 let body = document.querySelector("body");
 let canva = document.getElementById("canva");
 let ctx = canva.getContext("2d");
+let leftInput = document.getElementById("leftInput");
+let rightInput = document.getElementById("rightInput");
+
 
 ctx.fillStyle = "darkblue";
 ctx.fillRect(0, 0, canva.width, canva.height);
@@ -23,6 +26,9 @@ let rectangleHeight = 8;
 let dateDebut = Date.now();
 
 function resetCanva() {
+  dx = 0;
+  dy = 5;
+  dateDebut = Date.now();
   gameLoose = false;
   ctx.beginPath();
   ctx.clearRect(0, 0, canva.width, canva.height);
@@ -32,8 +38,8 @@ function resetCanva() {
   x = canva.width / 2;
   y = (canva.height / 6) * 5;
   ctx.fill();
+  drawPad();
   ctx.closePath();
-  draw();
 }
 
 function drawPad() {
@@ -87,7 +93,12 @@ window.addEventListener('keydown',function(e){
 window.addEventListener('keyup',function(e){
     keyState[e.keyCode || e.which] = false;
 },true);
-    
+leftInput.addEventListener('click', function(e) {
+
+});
+rightInput.addEventListener('click', function(e) {
+});
+
   function gameLoop() {
     if (keyState[37] || keyState[65]){
       if(rectangleX > 0){
@@ -106,11 +117,10 @@ window.addEventListener('keyup',function(e){
 
 
 function startGame() {
-  drawPad();
+  resetCanva();
   dx = 1
   dy = -2
   draw();
 }
 
-startGame();
-gameLoop();
+  gameLoop();
