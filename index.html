@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="script/script.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://kit.fontawesome.com/68b987a37a.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style/style.css">
     <title>Document</title>
 </head>
@@ -19,15 +20,15 @@
         <canvas class="border-4 border-white rounded-xl" width="350" height="500" id="canva"></canvas>
     </div>
     <div>
-        <button class="" id="leftInput">left</button>
+        <button class="lg:hidden hover:cursor-pointer" id="leftInput" onmousedown="mouseDownLeft()" onmouseup="mouseUpLeft()"><i class="fa-solid fa-arrow-left"></i></button>
         <button
             class="rounded mt-2 mb-1 pl-1 pr-1 text-3xl hover:shadow hover:shadow-gray-500 hover:duration-300 hover:bg-blue-400 hover:cursor-pointer"
             id="newGameButton" type="button" onclick="resetCanva()"> New game</button>
 
-        <button id="rightInput">right</button>
+        <button class="lg:hidden hover:cursor-pointer" id="rightInput" onmousedown="mouseDownRight()" onmouseup="mouseUpRight()"><i class="fa-solid fa-arrow-right"></i></button>
     </div>
-    <div>
-
+    <div id="flashbang" class="hidden absolute bg-white w-full h-full text-black content-center items-center justify-center">
+        <p class="text-5xl text-center">FLASHBANG</p>
     </div>
 </body>
 

@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+.fade-out {
+	animation: fade-out 1s ease-out both;
+}
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

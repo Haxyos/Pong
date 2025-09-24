@@ -1,4 +1,4 @@
-function sleep(ms) {
+async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 var keyState = {};
@@ -9,17 +9,18 @@ let leftInput = document.getElementById("leftInput");
 let rightInput = document.getElementById("rightInput");
 let lancer1 = false;
 let lancer2 = false;
-
-let x = canva.width / 2;
-let y = (canva.height / 6) * 5;
-let dx = 0;
-let dy = 0;
-let radius = 6.5;
-let gameLoose = false;
-let rectangleX = canva.width / 2 - 25;
+let rectangleX = canva.width / 2 - 30;
 let rectangleY = canva.height - 50;
 let rectangleWidth = 60;
 let rectangleHeight = 8;
+let clickGauche = false;
+let clickDroit = false;
+let x = canva.width / 2;
+let radius = 7.5;
+let y = rectangleY + radius;
+let dx = 0;
+let dy = 0;
+let gameLoose = false;
 let dateDebut = Date.now();
 let id;
 function drawBackground() {
@@ -30,17 +31,19 @@ function drawBackground() {
 drawBackground();
 
 function resetCanva() {
-  if(lancer1){
+  if (lancer1) {
     lancer2 = true;
-  }
-  else{
+  } else {
     lancer1 = true;
   }
-  dx = Math.random() * 2 + Math.random() * (-3);
+  dx = Math.random() * 2 + Math.random() * -3;
+  while (dx < 0.8 && dx > -0.8) {
+    dx = Math.random() * 2 + Math.random() * -3;
+  }
   dy = -2;
   x = canva.width / 2;
-  y = (canva.height / 6) * 5;
-  rectangleX = canva.width / 2 - 25;
+  y = rectangleY - radius;
+  rectangleX = canva.width / 2 - 30;
   rectangleY = canva.height - 50;
   dateDebut = Date.now();
   ctx.beginPath();
@@ -49,7 +52,7 @@ function resetCanva() {
   drawBall();
   drawPad();
   ctx.closePath();
-  if (!gameLoose){
+  if (!gameLoose) {
     startGame();
   }
   gameLoose = false;
@@ -74,13 +77,13 @@ function drawBall() {
   ctx.stroke();
 }
 
-function draw() {
+async function draw() {
   if (gameLoose) {
     cancelAnimationFrame(id);
     resetCanva();
     return;
   }
-  if (lancer2){
+  if (lancer2) {
     cancelAnimationFrame(id);
   }
   x += dx;
@@ -89,6 +92,12 @@ function draw() {
   drawPad();
   if (canva.height - y < radius) {
     gameLoose = true;
+    document.getElementById("flashbang").classList.remove("hidden");
+    await sleep(1500);
+    document.getElementById("flashbang").classList.add("fade-out");
+    await sleep(1000);
+    document.getElementById("flashbang").classList.add("hidden");
+    document.getElementById("flashbang").classList.remove("fade-out")
     lancer1 = false;
     lancer2 = false;
   }
@@ -110,7 +119,16 @@ function draw() {
     dx = dx;
     dy = -dy - 0.15;
   }
-  console.log(dx, dy);
+  if (clickGauche) {
+    if (rectangleX > 0) {
+      rectangleX -= 5;
+    }
+  }
+  if (clickDroit) {
+    if (rectangleX + rectangleWidth < canva.width) {
+      rectangleX += 5;
+    }
+  }
   let timer = Date.now();
   document.getElementById("Score").innerHTML =
     "Score : " + Math.floor((timer - dateDebut) / 1000) + " s";
@@ -130,8 +148,38 @@ window.addEventListener(
   },
   true
 );
-leftInput.addEventListener("click", function (e) {});
-rightInput.addEventListener("click", function (e) {});
+
+function mouseDownLeft() {
+  clickGauche = true;
+}
+
+function mouseDownRight() {
+  clickDroit = true;
+}
+
+function mouseUpLeft() {
+  clickGauche = false;
+}
+
+function mouseUpRight() {
+  clickDroit = false;
+}
+
+leftInput.addEventListener("touchstart", () => {
+  clickGauche = true;
+});
+
+rightInput.addEventListener("touchstart", () => {
+  clickDroit = true;
+});
+
+leftInput.addEventListener("touchend", () => {
+  clickGauche = false;
+});
+
+rightInput.addEventListener("touchend", () => {
+  clickDroit = false;
+});
 
 function gameLoop() {
   if (keyState[37] || keyState[65]) {
